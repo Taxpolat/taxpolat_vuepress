@@ -12,6 +12,8 @@ module.exports = {
     author: 'Taxpolat',
     noFoundPageByTencent: true,
     type: 'blog',
+    logo: '/images/114.jpg',
+    authorAvatar: '/images/114.jpg',
     blogConfig: {
       tag: {
         location: 1, // 在导航栏菜单中所占的位置，默认3
