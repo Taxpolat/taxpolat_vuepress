@@ -6,7 +6,7 @@
   "author": "Taxpolat <1533097477@qq.com>",
   "license": "MIT",
   "scripts": {
-    "docs:dev": "vuepress dev docs",
+    "dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "gh": "bash ./deploy.sh",
     "git": "bash ./commit.sh"

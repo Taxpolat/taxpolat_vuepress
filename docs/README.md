@@ -1,8 +1,11 @@
 ---
 home: true
-bgImage: '/images/header.jpg'
+bgImage: '/images/Istanbul.jpg'
 bgImageStyle: {
-  height: '500px'
+  # height: '500px',
+
+  height: '700px',
+  width: "100%"
 }
 ---
 
