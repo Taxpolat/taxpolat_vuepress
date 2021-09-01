@@ -1,0 +1,20 @@
+{
+  "name": "taxpolat_vuepress",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Taxpolat/taxpolat_vuepress.git",
+  "author": "Taxpolat <1533097477@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "commit": "yarn docs:build && yarn deploy",
+    "deploy": "gh-pages -d /docs/.vuepress/dis"
+  },
+  "devDependencies": {
+    "vuepress": "^1.8.2"
+  },
+  "dependencies": {
+    "gh-pages": "^3.2.3"
+  }
+}
