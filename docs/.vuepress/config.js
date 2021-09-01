@@ -3,7 +3,9 @@ module.exports = {
   description: 'Tomorrow is another day. and you can be just the one you wanna be.',
   base: '/taxpolat_vuepress/',
   port: '4220',
-  head: [],
+  head: [
+    ["link", { rel: "stylesheet", href: "/css/style.css" }],
+  ],
   markdown: {
     lineNumbers: true
   },
@@ -57,6 +59,14 @@ module.exports = {
           opacity: 0.8 // 模型透明度(default: 0.8)
         }
       }
-    }]
+    }],
+    [
+      'cursor-effects',
+      {
+        size: 2, // size of the particle, default: 2
+        shape: 'star', // shape of the particle, default: 'star'
+        zIndex: 999999999, // z-index property of the canvas, default: 999999999
+      },
+    ],
   ]
 }
