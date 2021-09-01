@@ -1,6 +1,6 @@
 ---
 home: true
-# bgImage: '/img/header.jpg'
+bgImage: '/images/header.jpg'
 bgImageStyle: {
   height: '500px'
 }
