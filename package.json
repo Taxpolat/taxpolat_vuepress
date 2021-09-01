@@ -9,7 +9,8 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "commit": "yarn docs:build && yarn deploy",
-    "deploy": "gh-pages -d /docs/.vuepress/dis"
+    "publish": "git add . && git commit -m '1'&& git push && yarn commit ",
+    "deploy": "gh-pages -d /docs/.vuepress/dist"
   },
   "devDependencies": {
     "vuepress": "^1.8.2"
