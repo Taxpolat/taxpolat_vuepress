@@ -2,6 +2,7 @@
 title: 【Vue】Vuex
 date: 2021-08-31
 sidebar: 'auto'
+cover: https://pan.zealsay.com/mweb/blog/WechatIMG11.png 
 categories:
  - Vue
 tags:

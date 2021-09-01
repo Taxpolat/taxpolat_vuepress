@@ -1,4 +1,8 @@
 module.exports = [{
+    text: 'Home',
+    link: '/',
+    icon: 'reco-home'
+  }, {
     text: '笔记',
     link: '/records/',
     items: [{

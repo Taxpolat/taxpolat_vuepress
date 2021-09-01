@@ -25,7 +25,7 @@ module.exports = {
     authorAvatar: '/images/114.jpg',
     blogConfig: {
       tag: {
-        location: 1, // 在导航栏菜单中所占的位置，默认3
+        location: 2, // 在导航栏菜单中所占的位置，默认3
         text: '标签' // 默认文案 “标签”
       }
     },
