@@ -14,8 +14,9 @@ git init
 git add -A
 git commit -m 'deploy'
 
-git push -f "https://${access_token}@github.com/Taxpolat/taxpolat_vuepress.git" master:gh-pages
+git push -f "https://github.com/Taxpolat/taxpolat_vuepress.git" master:gh-pages
 # git@github.com:Taxpolat/taxpolat_vuepress.git master:gh-pages
+# https://github.com/Taxpolat/taxpolat_vuepress.git
 # https://github.com/Taxpolat/taxpolat_vuepress
 
 cd -

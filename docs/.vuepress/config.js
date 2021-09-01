@@ -4,7 +4,14 @@ module.exports = {
   base: '/taxpolat_vuepress/',
   port: '4220',
   head: [
-    ["link", { rel: "stylesheet", href: "/css/style.css" }],
+    ["link", {
+      rel: "stylesheet",
+      href: "/css/style.css"
+    }],
+    ['link', {
+      rel: 'icon',
+      href: '/images/favicon.ico'
+    }]
   ],
   markdown: {
     lineNumbers: true

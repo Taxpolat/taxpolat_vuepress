@@ -8,10 +8,17 @@ module.exports = [{
   }, {
     text: '工具',
     items: [{
-        text: '在线编辑',
+        text: '实用工具',
         items: [{
-            text: '文本处理',
-            link: 'http://www.esjson.com/delSpace.html'
+            text: '制作icon图标',
+            link: 'https://www.bitbug.net/'
+          },
+          {
+            text: 'vuepress-theme-reco',
+            link: ' https://vuepress-theme-reco.recoluan.com/'
+          }, {
+            text: '文本转换',
+            link: 'http://www.esjson.com/'
           },
           {
             text: '前端工具',
@@ -26,16 +33,24 @@ module.exports = [{
             link: 'https://www.nowcoder.com/'
           },
           {
-            text: '技术胖学习平台',
-            link: 'http://www.jspang.com/'
+            text: '阮一峰',
+            link: 'https://www.ruanyifeng.com/blog/javascript/'
           },
           {
-            text: '慕课网',
-            link: 'https://www.imooc.com/course/list?c=fe&page=2'
+            text: 'MDN教程',
+            link: 'https://developer.mozilla.org/zh-CN/docs/Web'
           },
           {
-            text: '手把手撸前端',
-            link: 'https: //www.imooc.com/course/list?c=fe&page=2'
+            text: 'TypeScript',
+            link: 'https://typescript.bootcss.com/'
+          },
+          {
+            text: 'Vue官网',
+            link: 'https://cn.vuejs.org/'
+          },
+          {
+            text: 'React官网',
+            link: 'https://zh-hans.reactjs.org/'
           }
         ]
       },
