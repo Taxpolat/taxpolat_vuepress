@@ -1,0 +1,7 @@
+module.exports = [{
+    title: 'vue面试题汇总',
+    collapsable: true,
+    children: [
+        '/dailySummary/css/notes/bd1',
+    ]
+}]

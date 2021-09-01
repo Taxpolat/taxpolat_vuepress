@@ -1,23 +1,9 @@
 module.exports = {
-  base: '/docs/',
   title: 'Taxpolat的个人空间',
   description: 'Tomorrow is another day. and you can be just the one you wanna be.',
-  // dest: './dist',
+  base: '/taxpolat_vuepress/',
   port: '4220',
-  head: [
-    ["rel", {
-      rel: "stylesheet",
-      href: "/css/style.css"
-    }],
-    ["text/javascript", {
-      charset: "utf-8",
-      src: "/js/main.js"
-    }],
-    ['meta', {
-      name: 'viewport',
-      content: 'width=device-width,initial-scale=1,user-scalable=no'
-    }]
-  ],
+  head: [],
   markdown: {
     lineNumbers: true
   },
@@ -32,7 +18,8 @@ module.exports = {
         text: '标签' // 默认文案 “标签”
       }
     },
-    // nav: require('./nav.js'),
+    nav: require('./nav.js'),
+    sidebar: require('./sidebar.js'),
     sidebarDepth: 2,
     lastUpdated: 'Last Updated',
     searchMaxSuggestoins: 10,
