@@ -14,8 +14,8 @@ module.exports = [{
             link: 'https://www.bitbug.net/'
           },
           {
-            text: 'vuepress-theme-reco',
-            link: ' https://vuepress-theme-reco.recoluan.com/'
+            text: 'vuepress-theme-reco官网',
+            link: 'https://vuepress-theme-reco.recoluan.com/'
           }, {
             text: '文本转换',
             link: 'http://www.esjson.com/'
