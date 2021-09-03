@@ -7,7 +7,7 @@ module.exports = [{
     link: '/records/',
     items: [{
       text: 'vue',
-      link: '/records/vue/notes/Vuex'
+      link: '/records/vue/notes/VueBasic'
     }, ]
   }, {
     text: '工具',

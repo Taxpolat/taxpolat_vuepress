@@ -1,13 +1,15 @@
 ---
-title: 【vue】vue面试题汇总（1-20）
-date: 2021-08-06
+title: 【Vue】Vue面试题目
+date: 2021-09-01
 sidebar: 'auto'
+author: 'Taxpolat'
 categories:
  - Vue
 tags:
  - Vue
+ - 面试
 ---
-
+<!-- 
 #  vue面试题汇总（1-20）
 
 # 1.vue中，app是如何适配的
@@ -52,4 +54,4 @@ tags:
 
 vue 双向数据绑定是通过数据劫持结合发布订阅模式的方式来实现的，也就是说数据和视图同步，数据发生变化，视图跟着变化，视图变化，数据也随之发生改变
 
-# 5.如何理解MVVM模式
+# 5.如何理解MVVM模式 -->

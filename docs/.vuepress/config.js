@@ -32,7 +32,7 @@ module.exports = {
     nav: require('./nav.js'),
     sidebar: require('./sidebar.js'),
     sidebarDepth: 2,
-    lastUpdated: 'Last Updated',
+    // lastUpdated: 'Last Updated',
     searchMaxSuggestoins: 10,
     serviceWorker: {
       updatePopup: {
@@ -53,7 +53,7 @@ module.exports = {
         // https://github.com/JoeyBling/hexo-theme-yilia-plus/wiki/live2d%E6%A8%A1%E5%9E%8B%E5%8C%85%E5%B1%95%E7%A4%BA
         model: 'hibiki',
         display: {
-          position: "right", // 显示位置：left/right(default: 'right')
+          position: "left", // 显示位置：left/right(default: 'right')
           width: 135, // 模型的长度(default: 135)
           height: 300, // 模型的高度(default: 300)
           hOffset: 65, //  水平偏移(default: 65)
