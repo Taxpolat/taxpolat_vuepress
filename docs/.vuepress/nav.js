@@ -65,4 +65,12 @@ module.exports = [{
     link: '/timeline/',
     // icon: 'reco-date'
   },
+  {
+    text: '关于我',
+    items: [{
+      text: 'github',
+      link: 'https://github.com/Taxpolat',
+    }]
+    // icon: 'reco-date'
+  },
 ]

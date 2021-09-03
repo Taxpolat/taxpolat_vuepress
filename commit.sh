@@ -2,6 +2,6 @@
 
 git add -A
 
-git commit -m 'deploy'
+git commit -m 'new change'
 
 git push origin master
