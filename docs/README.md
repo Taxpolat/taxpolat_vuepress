@@ -8,6 +8,3 @@ bgImageStyle: {
   width: "100%"
 }
 ---
-
-<!-- # Hello VuePress!
-这是taxpolat -->
