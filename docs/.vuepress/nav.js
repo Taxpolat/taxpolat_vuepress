@@ -68,7 +68,8 @@ module.exports = [{
   {
     text: '关于我',
     items: [{
-      text: 'github',
+      text: 'Github',
+      icon: 'reco-github',
       link: 'https://github.com/Taxpolat',
     }]
     // icon: 'reco-date'
