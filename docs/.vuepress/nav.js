@@ -6,9 +6,14 @@ module.exports = [{
     text: '笔记',
     link: '/records/',
     items: [{
-      text: 'vue',
-      link: '/records/vue/notes/VueBasic'
-    }, ]
+        text: 'vue',
+        link: '/records/vue/notes/VueBasic'
+      },
+      {
+        text: 'Javascript',
+        link: '/records/JavaScript/notes/MD5'
+      }
+    ]
   }, {
     text: '工具',
     items: [{
