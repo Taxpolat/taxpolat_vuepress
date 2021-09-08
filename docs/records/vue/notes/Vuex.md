@@ -605,7 +605,10 @@ this.$store
 ### Store严格模式
 ##### 开启严格模式，仅需在创建 store 的时候传入 strict: true；
 在严格模式下，无论何时发生了状态变更且不是由 mutation 函数引起的，将会抛出错误。这能保证所有的状态变更都能被调试工具跟踪到。
-#####不要在发布环境下启用严格模式
+
+::: danger
+ 不要在发布环境下启用严格模式
+:::
 ```javascript
 const store = new Vuex.Store({
 	// ...
