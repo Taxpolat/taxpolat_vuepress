@@ -1,6 +1,6 @@
 ---
 title: 【Vue】Vue面试题目
-date: 2021-09-01
+date: 2021-09-03
 sidebar: 'auto'
 author: 'Taxpolat'
 categories:
@@ -9,10 +9,70 @@ tags:
  - Vue
  - 面试
 ---
-<!-- 
-#  vue面试题汇总（1-20）
 
-# 1.vue中，app是如何适配的
+##  vue面试题汇总
+
+### 1. 为什么 data 是一个函数？   
+:star::star::star::star::star:
+:::tip
+组件中的 data 写成一个函数，数据以函数返回值形式定义，这样每复用一次组件，就会返回一份新的 data，类似于给每个组件实例创建一个私有的数据空间，让各个组件实例维护各自的数据。而单纯的写成对象形式，就使得所有组件实例共用了一份 data，就会造成一个变了全都会变的结果。
+:::
+### 2.Vue框架中组件通讯的方式有哪几种？   
+:star::star::star::star::star:
+:::tip
+在一个项目中，组件之间的消息传递，数据互通是非常重要的。   
+组件传递数据的场景：
+- 父组件 ->子组件间的数据传递
+- 子组件 -> 父组件间的数据传递
+- 兄弟组件间的数据传递
+- 组件深层嵌套，祖先组件与子组件间的数据传递
+:::
+1. `prop`: 父组件,传递数据, 子组件，接受数据，定义传递数据的类型type与默认值default,require是否必传
+2. `$emit`:是子组件传递数据给父组件时可以使用`$emit` 触发事件来做到
+3. `$parent`,`$children`:可以直接用`$children`/`$parent`获取当前组件的子组件实例或父组件实例,也能对其做些操作。`$children`是一个数组，里面有个 _uid 属性，可以知道他是第几个元素，是元素的唯一标识符，根据这个属性，我们可以进行其他的操作。（`不推荐使用此方法`）
+4. `$attrs` 和`$listeners`:A->B->C的情况使用，
+5. 父组件中通过 `provide `来提供变量,然后子组件中通过`inject`来注入变量（`不推荐使用此方法`）
+6. `$refs` 获取组件实例并且进行操作
+7. `eventBus`:兄弟组件数据传递 这种情况下可以使用事件总线的方式：
+   ``` js
+    import { EventBus } from "./event-bus.js";
+
+    EventBus.$emit("decreased", {
+        num:this.num,
+        deg:this.deg
+    });
+    EventBus.$on("decreased", ({num,deg}) => {
+      console.log(num, deg)
+    })
+   ```
+8. `Vuex`状态管理
+
+### 3. Vue 的生命周期方法有哪些 一般在哪一步发请求
+:star::star::star::star::star:
+
+1. `beforeCreate` 在实例初始化之后，数据观测(data observer) 和 `event/watcher` 事件配置之前被调用。在当前阶段 data、methods、computed 以及 watch 上的数据和方法都不能被访问
+2. `created` 实例已经创建完成之后被调用。在这一步，实例已完成以下的配置：数据观测(data observer)，属性和方法的运算， watch/event 事件回调。这里没有`$el`,如果非要想与 Dom 进行交互，可以通过 `vm.$nextTick` 来访问 Dom
+3. `beforeMount` 在挂载开始之前被调用：相关的 render 函数首次被调用。
+4. `mounted` 在挂载完成后发生，在当前阶段，真实的 Dom 挂载完毕，数据完成双向绑定，可以访问到 Dom 节点
+5. `beforeUpdate` 数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁（patch）之前。可以在这个钩子中进一步地更改状态，这不会触发附加的重渲染过程
+6. `updated` 发生在更新完成之后，当前阶段组件 Dom 已完成更新。要注意的是避免在此期间更改数据，因为这可能会导致无限循环的更新，该钩子在服务器端渲染期间不被调用。
+7. `beforeDestroy` 实例销毁之前调用。在这一步，实例仍然完全可用。我们可以在这时进行善后收尾工作，比如清除计时器。
+8. `destroyed` Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。 该钩子在服务器端渲染期间不被调用。
+#### 异步请求在哪一步发起？   
+:star::star::star::star:
+:::tip
+可以在钩子函数 `created、beforeMount、mounted` 中进行异步请求，因为在这三个钩子函数中，data 已经创建，可以将服务端端返回的数据进行赋值。   
+如果异步请求需要依赖 Dom 推荐在 `mounted` 钩子函数中调用异步请求
+如果异步请求不需要依赖 Dom 推荐在 `created` 钩子函数中调用异步请求，因为在 `created` 钩子函数中调用异步请求有以下优点：
+- 能更快获取到服务端数据，减少页面  loading 时间；
+- ssr  不支持 beforeMount 、mounted 钩子函数，所以放在 created 中有助于一致性；
+:::
+
+
+
+
+ 
+<!-- # 1.vue中，app是如何适配的
 
 (1)rem 布局
 
