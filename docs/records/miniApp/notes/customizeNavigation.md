@@ -1,6 +1,6 @@
 ---
-title: 【Vue】uniApp 自定义导航栏
-date: 2021-09-03
+title: 【小程序】uniApp 自定义导航栏
+date: 2021-09-10
 sidebar: 'auto'
 author: 'Taxpolat'
 categories:
