@@ -12,6 +12,9 @@ module.exports = [{
       {
         text: 'Javascript',
         link: '/records/JavaScript/notes/MD5'
+      }, {
+        text: '小程序',
+        link: '/records/miniApp/notes/customizeNavigation'
       }
     ]
   }, {
