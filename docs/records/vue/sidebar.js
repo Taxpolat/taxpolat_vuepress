@@ -5,6 +5,7 @@ module.exports = [{
     '/records/vue/notes/VueBasic',
     '/records/vue/notes/Vuex',
     '/records/vue/notes/VueRouter',
-    '/records/vue/notes/Questions'
+    '/records/vue/notes/Questions',
+    '/records/vue/notes/Globalization'
   ]
 }]
