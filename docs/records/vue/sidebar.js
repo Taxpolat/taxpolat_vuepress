@@ -6,6 +6,7 @@ module.exports = [{
     '/records/vue/notes/Vuex',
     '/records/vue/notes/VueRouter',
     '/records/vue/notes/Questions',
-    '/records/vue/notes/Globalization'
+    '/records/vue/notes/Globalization',
+    '/records/vue/notes/UseSVG'
   ]
 }]
