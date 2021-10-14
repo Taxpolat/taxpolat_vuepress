@@ -24,7 +24,7 @@ __SVG__ : __可缩放矢量图形（Scalable Vector Graphics，SVG）__, 是一�
 ## 使用
 
 以下整理了一下`SVG`在`Vue`项目中的使用方法及步骤：
-1. 在`src/components/`下创建`SvgIcon/index.vue`组件
+### 在`src/components/`下创建`SvgIcon/index.vue`组件
 
 ```vue
 
@@ -87,49 +87,48 @@ export default {
 </style>
 
 ```
-2. 在`src/`下创建一个`icons`目录，目录结构如下：
-   `svg`目录主要用于存放`svg`文件，来看一下`index.js`的内容，功能就是把组件注册到全局，方便使用：
-   ```js
-    import Vue from 'vue'
-    import SvgIcon from '@/components/SvgIcon' // svg组件
-
-    // 注册到全局
-    Vue.component('svg-icon', SvgIcon)
-
-    const requireAll = requireContext => requireContext.keys().map(requireContext)
-    const req = require.context('./svg', false, /\.svg$/)
-    requireAll(req)
-
-   ```
-  ::: tip
-    当然，如果你有自己的想法或需求，可以单独引入，无需非要注册到全局。
-  :::
-3. `main.js中引入`
-   这一步就没什么好说的了，如果需要注册到全局，需要在入口文件中引入。
-  ```js
-  import '@/icons'
-  ```
-4. 在 `vue.config.js`中配置 `svg-sprite-loader`
+### 在`src/`下创建一个`icons`目录，目录结构如下：
+`svg`目录主要用于存放`svg`文件，来看一下`index.js`的内容，功能就是把组件注册到全局，方便使用：
 ```js
-  // set svg-sprite-loader
-  config.module
-    .rule('svg')
-    .exclude.add(resolve('src/icons'))
-    .end()
-  config.module
-    .rule('icons')
-    .test(/\.svg$/)
-    .include.add(resolve('src/icons'))
-    .end()
-    .use('svg-sprite-loader')
-    .loader('svg-sprite-loader')
-    .options({
-      symbolId: 'icon-[name]'
-    })
-    .end()
+import Vue from 'vue'
+import SvgIcon from '@/components/SvgIcon' // svg组件
+
+// 注册到全局
+Vue.component('svg-icon', SvgIcon)
+
+const requireAll = requireContext => requireContext.keys().map(requireContext)
+const req = require.context('./svg', false, /\.svg$/)
+requireAll(req)
+
 ```
-5. `vue`中使用
-   
+::: tip
+当然，如果你有自己的想法或需求，可以单独引入，无需非要注册到全局。
+:::
+### `main.js中引入`
+这一步就没什么好说的了，如果需要注册到全局，需要在入口文件中引入。
+```js
+import '@/icons'
+```
+### 在 `vue.config.js`中配置 `svg-sprite-loader`
+```js
+// set svg-sprite-loader
+config.module
+  .rule('svg')
+  .exclude.add(resolve('src/icons'))
+  .end()
+config.module
+  .rule('icons')
+  .test(/\.svg$/)
+  .include.add(resolve('src/icons'))
+  .end()
+  .use('svg-sprite-loader')
+  .loader('svg-sprite-loader')
+  .options({
+    symbolId: 'icon-[name]'
+  })
+  .end()
+```
+### `vue`中使用
 ```vue 
 <template>
   <div class="hello">
@@ -165,9 +164,8 @@ export default {
   }
 </style>
 ```
-   
-  :::danger
-  1. 必须使用svg文件
-  2. svg文件必须放在`icons/svg`下面
-  3. `svg-icon` 的 `iconClass`属性传的，必须跟`svg`文件的文件名一样。
-  :::
+:::danger
+1. 必须使用svg文件
+2. svg文件必须放在`icons/svg`下面
+3. `svg-icon` 的 `iconClass`属性传的，必须跟`svg`文件的文件名一样。
+:::
