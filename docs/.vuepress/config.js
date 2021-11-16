@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Taxpolat的个人空间',
+  title: 'Taxpolat',
   description: 'Tomorrow is another day. and you can be just the one you wanna be.',
   base: '/taxpolat_vuepress/',
   port: '4220',
