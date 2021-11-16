@@ -15,6 +15,10 @@ module.exports = [{
       }, {
         text: '小程序',
         link: '/records/miniApp/notes/customizeNavigation'
+      },
+      {
+        text: 'MySQL',
+        link: '/records/SQL/notes/basic'
       }
     ]
   }, {
