@@ -71,7 +71,7 @@ SQL (结构化查询语言)是用于执行查询的语法。但是 SQL 语言也
   - DROP INDEX - 删除索引
 ### :vulcan_salute:  SQL SELECT 语句
 __SELECT 语句用于从表中选取数据。结果被存储在一个结果表中（称为结果集）__
-
+`一条 SELECT 语句或者叫一个查询, 可以描述我们要从什么表取数据， 要取哪些数据，在返回之前怎么对结果做一些转化计算等等`
 SQL SELECT 语法: 
 ```sql
 -- 获取指定列的所有数据
@@ -129,6 +129,7 @@ SELECT age FROM user
 SELECT DISTINCT age FROM user 
 ```
 结果： 
+
 | age|
 | --:|
 | 36 |

@@ -8,8 +8,7 @@ module.exports = [{
     '/records/vue/notes/Questions',
     '/records/vue/notes/Globalization',
     '/records/vue/notes/UseSVG',
-    '/records/vue/notes/ElementLoading'
-
-    
+    '/records/vue/notes/ElementLoading',
+    '/records/vue/notes/Vue3'
   ]
 }]
