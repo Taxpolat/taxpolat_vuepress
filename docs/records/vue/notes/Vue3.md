@@ -263,3 +263,215 @@ const p = new proxy(person, {
 3. 使用角度
    - ref定义的响应式数据，当操作数据是需要添加`.value`,模版中读取数据时不需要.value
    - reactive定义的响应式数据，操作和读取都不需要`.value`
+
+## setup的注意点
+
+(1) Vue2里给组件传props 进去可以声明也可以声明，不声明Vue不会给出警告，声明直接通过this获取相应的props, `$attrs`里不会有数据，不声明可以通过`$attrs`获取，
+
+(2)Vue3里给组件传props,不声明Vue会给出警告，但是能够通过`setup`接受的参数`context.attrs`获取到，如果声明了，就直接setup的`props`参数获取，`context.attrs`中不会有数据，此处同Vue2的 `$attrs`
+
+1. setup执行时机
+    - 在生命周期`beforeCreated`之前执行一次，this是undefined。
+    :::warning
+    beforeCreated:第一个声明周期，无法通过vm访问到data中的数据,methods中的方法   
+    __意思就是`setup`的执行时机比`beforeCreated`都要早！！！__
+    :::
+    
+2. setup的参数
+    - 能够接受两个参数 `props`,`context`
+    - props:父组件传给 子组件的数据，外面传了要注册接受，外面可以不传里面已经注册的参数。已经注册的参数取值为undefined。
+    - context：上下文对象， 内容中主要关注：`attrs`，`slots`, `emit` 这三个内容。
+      - attrs：相当于vue2中的`$attrs`， props传进来的参数，如果组件中没有注册这个`props` ，那就会存`context.attrs`
+      - emit：组件内触发自定义事件，同vue2的`$emit`，但是Vue3中需要用`emits`属性去注册要触发的事件,可以用但是会有Vue警告。
+```vue
+// 父组件
+<template>
+  <demo @hello="handelHello" />
+</template>
+<script>
+import demo from "./components/Demo.vue";
+export default {
+  name: "App",
+  components: { demo },
+  setup() {
+    function handelHello(msg) {
+      alert(`this is component emit, message is ${msg}`);
+    }
+    return {
+      handelHello,
+    };
+  },
+};
+</script>
+// 子组件
+<template>
+  <h1>我是App组件</h1>
+  <button @click="handelClick">点击触发Emit</button>
+</template>
+<script>
+export default {
+  name: "Demo",
+  emits:['hello'] // 注册事件
+  setup(props, context) {
+    // 方法
+    function handelClick() {
+      context.emit("hello", 6666);
+    }
+    // 返回一个对象
+    return {
+      handelClick,
+    };
+  },
+};
+</script>
+```
+- slots：收到的插槽的内容， 同Vue2的`this.$slots`
+## 计算属性和监视
+### 1. Computed 属性
+
+- 与Vue2的Computed属性一致，计算属性，计算属性
+- 写法
+  - 简单写法 没有考虑被修改
+
+```vue
+<template>
+  <h2>信息：{{ computedInformation }}</h2>
+</template>
+<script>
+import { reactive,computed } from "vue";
+export default {
+  setup(props, context) {
+    // 数据
+    let person = reactive({
+      name: "Taxpolat",
+      age: 24,
+    });
+    let computedInformation = computed(() => {
+      return person.name + person.age
+    })
+    // 返回一个对象
+    return {
+      computedInformation
+    };
+  },
+};
+</script>
+```
+
+  - 完整写法
+
+```vue
+<template>
+  <h2>信息：{{ computedInformationFull }}</h2>
+</template>
+<script>
+import { reactive,computed } from "vue";
+export default {
+  setup(props, context) {
+    // 数据
+    let person = reactive({
+      name: "Taxpolat",
+      age: 24,
+    });
+    let computedInformationFull = computed(() => {
+      get(){
+        return person.name + person.age
+      }
+      set(value) {
+        const nameArr= value.split("-")
+        person.name = nameArr[0]
+        person.age = nameArr[1]
+      }
+    })
+    // 返回一个对象
+    return {
+      computedInformationFull
+    };
+  },
+};
+</script>
+```
+### 2. Watch函数
+- 与Vue2的`watch`一致
+- 坑点：
+  1. 监视reactive定义的响应式数据时：oldValue无法正确获取，强制开启了深度监视（deep配置无效）。
+  2. 监视reactive定义的响应式数中某一个属性时：deep有效
+
+`watch`写法分一下几种：
+```vue
+<template>
+  <h2>信息：{{ computedInformationFull }}</h2>
+</template>
+<script>
+import { reactive,computed } from "vue";
+export default {
+  setup() {
+    // 情况一 监视ref所定义的一个响应式数据
+    // immediate 属性是有效的
+    let sum1 = ref(0);
+    watch(
+      sum1,
+      (newValue, oldValue) => {
+        console.log(newValue, oldValue);
+      },
+      { immediate: true }
+    );
+    //情况二  监视ref所定义的多个响应式数据
+    // 监视ref定义的响应式数据，不需要设置deep 不奏效
+    let sum = ref(0);
+    let msg = ref("hello");
+    watch(
+      [sum, msg],
+      (newValue, oldValue) => {
+        console.log(newValue, oldValue);
+      },
+      { immediate: true }
+    );
+    // 数据
+    let person = reactive({
+      name: "Taxpolat",
+      age: 24,
+      job: {
+        j1: {
+          salary: 15,
+        },
+      },
+    });
+    // 情况三  监视reactive所定义的一个响应式数据的全部属性
+    // 1. 次情况无法正确获取oldValue
+    // 2.次情况强制开启了深度监视（deep配置无效）
+    watch(person, (newValue, oldValue) => {
+      console.log("person变化了", newValue, oldValue);
+    });
+    // 情况四  监视reactive所定义的一个响应式数据的某一个属性
+    watch(
+      () => person.age,
+      (newValue, oldValue) => {
+        console.log("person.age", newValue, oldValue);
+      }
+    );
+    // 情况五： 监视reactive所定义的一个响应式数据的多个属性
+    watch([() => person.age, () => person.name], (newValue, oldValue) => {
+      console.log("person.age", newValue, oldValue);
+    });
+    // 特殊情况：
+    watch(
+      () => person.job,
+      (newValue, oldValue) => {
+        console.log("person.job", newValue, oldValue);
+      },
+      {
+        deep: true,
+      }
+    );
+    // 返回一个对象
+    return {
+      sum1,
+      sum,
+      msg,
+      person,
+    };
+  },
+};
+</script>
+```
