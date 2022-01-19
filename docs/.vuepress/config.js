@@ -18,6 +18,19 @@ module.exports = {
   },
   theme: 'reco',
   themeConfig: {
+    huawei: true,
+    locales: {
+      '/': {
+        recoLocales: {
+          pagation: {
+            prev: '上一页',
+            next: '下一页',
+            go: '前,',
+            jump: '跳转至'
+          }
+        }
+      }
+    },
     author: 'Taxpolat',
     noFoundPageByTencent: true,
     type: 'blog',

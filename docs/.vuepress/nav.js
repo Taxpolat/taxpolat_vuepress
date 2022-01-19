@@ -75,7 +75,7 @@ module.exports = [{
   {
     text: '时间轴',
     link: '/timeline/',
-    // icon: 'reco-date'
+    icon: 'reco-date'
   },
   {
     text: '关于我',
