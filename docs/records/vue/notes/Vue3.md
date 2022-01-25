@@ -140,14 +140,14 @@ const xxx = ref(initValue)
 
 ### vue2中的 ref：
 
-1. 是标签的属性，起到一个  跟ID一样的一个属性，可以给我们的找出使用reff的所有的表情，
+1. 是标签的属性，起到一个  跟ID一样的一个属性，可以给我们的找出使用ref的所有的表情，
 
 ### vue3中的 ref：
 
 1. setup直接定义的数据是非响应式数据，想要把非响应式数据高程响应式数据，那必须得调用vue3 的 ref函数
-2. setup的数据调用rref函数时 ，数据会变成ref引用对象。
+2. setup的数据调用ref函数时 ，数据会变成ref引用对象。
 3. JS中操作数据`xxx.value`才能去操作
-4.  ter` 和 `setter` 是通过 `Object.defineProperty()` 来实现的
+4.  getter` 和 `setter` 是通过 `Object.defineProperty()` 来实现的
 5. `ref函数接收的数据类型` : 
    - 基本数据类型走的是 getter 和 setter `数据劫持的方式`进行响应式处理 
    - 对象类型的数据 走的是 `ES6 的 proxy`，<strong style="color:#DD5145">reactive函数</strong>
@@ -251,25 +251,185 @@ const p = new proxy(person, {
 1. 通过`Proxy（代理）`:拦截对象中任意的属性的变化，包括属性点的增删改查。
 2. 通过`Reflect(反射)`： 对被代理的属性进行操作。
 
-## reactive和ref函数的对比
 
-1. 从定义角度对比：
-   - ref用来定义<strong style="color:#DD5145">基本数据类型</strong>的响应式数据
-   - reactive用来定义<strong style="color:#DD5145">对象或数组类型</strong>的响应式数据类型
-   - ref 可以定义对象类型的数据，但vue3在内部自动通过`reactive`转化为代理对象
-2. 原理角度：
-   - ref通过`Object.defineProperty()`的get与set来实现数据响应式（数据劫持的方式）
-   - Reactive 通过`Proxy（代理）`:拦截对象中任意的属性的变化， 通过`Reflect(反射)`： 对被代理的属性进行操作
-3. 使用角度
-   - ref定义的响应式数据，当操作数据是需要添加`.value`,模版中读取数据时不需要.value
-   - reactive定义的响应式数据，操作和读取都不需要`.value`
+## 什么是组合式API
+:::tip
+__composition API(Vue3)__ —— 特点是特定功能相关的所有东西都放到一起维护，比如功能A相关的响应式数据，
+操作数据的方法等放到一起，这样不管应用多大，都可以快读定位到某个功能的所有相关代码，
+维护方便设置，如果功能复杂，代码量大，我们还可以进行逻辑拆分处理。
+:::
+### setup
+1. 新的 `setup` 选项在组件创建之前执行，一旦 `props` 被解析，就将作为`组合式 API` 的入口
+2.  `setUp函数`，是所有`Composition API的一个舞台`。
+3. 组件中所用到的数据，方法，生命周期，计算属性，监视属性等等，均配置在`setup`函数中。
+4. setup函数的两种返回值：
+  - <strong style="color:#DD5145">返回一个对象，则返回的数据，方法等属性均可以在模版中直接使用 </strong>
+  ```vue
+  <template>
+    <h1>
+      一个人的信息：
+      <li>名字：{{ name }}</li>
+      <li>年龄：{{ age }}</li>
+      <button @click="sayHello">点击</button>
+    </h1>
+  </template>
+  <script>
+    export default {
+      name: "App",
+      setup() {
+        let name = "Taxpolat";
+        let age = 25;
+        function sayHello() {
+          alert(`你好！，我是${name},今年${age}岁了`);
+        }
+        return {
+          name,
+          age,
+          sayHello,
+        };
+      },
+    };
+  </script>
+  ```
+  - 返回一个渲染函数:<strong style="color:#DD5145">只会渲染setup返回的渲染函数里面的内容，不会渲染模板里写的内容。</strong>
+  ```vue
+  <template>
+    <h1>
+      一个人的信息：
+      <li>名字：{{ name }}</li>
+      <li>年龄：{{ age }}</li>
+      <button @click="sayHello">点击</button>
+    </h1>
+  </template>
+  <script>
+    import { h } from "vue";
+    export default {
+      name: "App",
+      setup() {
+        return () => h("h1", "hello vue3");
+      },
+    };
+  </script>
+  ```
+5. 注意点：
+   1. 尽量不要和Vue2.x的配置混用
+    
+      1. <strong style="color:#DD5145">Vue2的配置中可以访问到Vue3中的setup中的属性，方法等内容</strong>
+      2. <strong style="color:#DD5145">但是在Vue3的setup中访问不到Vue2的配置内容。</strong>
+      3. <strong style="color:#DD5145">如果Vue2和Vue3混合使用时变量有重名，Vue3 setup 优先</strong>
+:::warning
+在 `setup` 中你应该避免使用 `this`，因为它不会找到组件实例。`setup` 的调用发生在 `data property`、`computed property` 或 `methods` 被解析之前，所以它们无法在 `setup` 中被获取。
+:::
 
-## setup的注意点
+<!-- `setup` 选项是个接受props和context的函数 -->
+## 响应式变量
 
-(1) Vue2里给组件传props 进去可以声明也可以声明，不声明Vue不会给出警告，声明直接通过this获取相应的props, `$attrs`里不会有数据，不声明可以通过`$attrs`获取，
+### ref
+__ref 创建一个包含响应式数据的引用对象， 函数使任何响应式变量在任何地方起作用,__
+```js
+import { ref } from 'vue'
 
-(2)Vue3里给组件传props,不声明Vue会给出警告，但是能够通过`setup`接受的参数`context.attrs`获取到，如果声明了，就直接setup的`props`参数获取，`context.attrs`中不会有数据，此处同Vue2的 `$attrs`
+const counter = ref(0)
+```
+1. setup直接定义的数据是非响应式数据，想要把非响应式数据改成响应式数据，那必须得调用vue3 的 ref函数
+2. setup的数据调用ref函数时 ，数据会变成ref引用对象。
+3. JS中操作数据`xxx.value`才能去操作
+4.  getter` 和 `setter` 是通过 `Object.defineProperty()` 来实现的
+5. `ref函数接收的数据类型` : 
+   - 基本数据类型走的是 getter 和 setter `数据劫持的方式`进行响应式处理 
+   - 对象类型的数据 走的是 `ES6 的 proxy`，<strong style="color:#DD5145">reactive函数</strong>
+#### ref的响应式数据使用
+```vue
+<template>
+  <h1>
+    一个人的信息：
+    <li>名字：{{ name }}</li>
+    <li>年龄：{{ age }}</li>
+    <button @click="changeInfo">修改</button>
+  </h1>
+</template>
+<script>
+import { ref } from "vue";
+export default {
+  name: "App",
+  setup() {
+    let name = ref("Taxpolat");
+    let age = ref(25);
+    function changeInfo() {
+      name.value = "vue3";
+      age.value = 26;
+    }
+    return {
+      name,
+      age,
+      changeInfo,
+    };
+  },
+};
+</script>
+   
+```
 
+###  Reactive函数
+```js
+import { reactive } from "vue";
+
+const dailiduixaing = reactive(yuanduixiang)
+```
+1. 定义一个<strong style="color:#DD5145">对象类型</strong>的响应式数据(基本类型不要用它， 基本类型使用<strong style="color:#DD5145">Ref函数</strong>）
+2. 内部是基于<strong style="color:#DD5145">ES6的proxy</strong>，接收一个对象（或者数组），返回一个<strong style="color:#DD5145">代理对象（proxy的实例对象， 简称proxy对象）</strong>
+3. 处理对象类型的数据时是<strong style="color:#DD5145">深层次的</strong>
+4. <strong style="color:#DD5145">能处理数组类型的数据</strong>
+
+```vue
+<template>
+  <h1>
+    一个人的信息：
+    <li>名字：{{ name }}</li>
+    <li>年龄：{{ age }}</li>
+    <li>工作：{{ job.type }}</li>
+    <li>使用语言：{{ job.lang }}</li>
+    <button @click="changeInfo">修改</button>
+  </h1>
+</template>
+<script >
+import { ref, reactive } from "vue";
+export default {
+  name: "App",
+  setup() {
+    let name = ref("Taxpolat");
+    let age = ref(25);
+    let job = reactive({
+      type: "开发者",
+      lang: "Javascript",
+    });
+    function changeInfo() {
+      name.value = "vue3";
+      age.value = 26;
+      job.type = "前端开发";
+      job.lang = "vue";
+    }
+    return {
+      name,
+      age,
+      job,
+      changeInfo,
+    };
+  },
+};
+</script>
+   
+```
+
+### reactive和ref函数的对比
+
+|          |                                                                        ref                                                                         |                                                reactive                                                 |
+| :------: | :------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+| 定义角度 | 1. 用来定义<strong style="color:#DD5145">基本数据类型</strong>的响应式数据。2.可以定义对象类型的数据，但vue3在内部自动通过`reactive`转化为代理对象 | 1.定义<strong style="color:#DD5145">对象或数组类型</strong>的响应式数据类型。2.不可以定义基本类型的数据 |
+| 原理角度 |                                       `Object.defineProperty()`的get与set来实现数据响应式（数据劫持的方式）                                        |      通过`Proxy（代理）`:拦截对象中任意的属性的变化， 通过`Reflect(反射)`： 对被代理的属性进行操作      |
+| 使用角度 |                                             当操作数据是需要添加`.value`,模版中读取数据时不需要.value                                              |                                       操作和读取都不需要`.value`                                        |
+
+### setup关键点
 1. setup执行时机
     - 在生命周期`beforeCreated`之前执行一次，this是undefined。
     :::warning
@@ -278,124 +438,65 @@ const p = new proxy(person, {
     :::
     
 2. setup的参数
-    - 能够接受两个参数 `props`,`context`
+    - 能够接受两个参数 <strong style="color:#DD5145">props，context</strong>
     - props:父组件传给 子组件的数据，外面传了要注册接受，外面可以不传里面已经注册的参数。已经注册的参数取值为undefined。
     - context：上下文对象， 内容中主要关注：`attrs`，`slots`, `emit` 这三个内容。
       - attrs：相当于vue2中的`$attrs`， props传进来的参数，如果组件中没有注册这个`props` ，那就会存`context.attrs`
       - emit：组件内触发自定义事件，同vue2的`$emit`，但是Vue3中需要用`emits`属性去注册要触发的事件,可以用但是会有Vue警告。
+
+### Computed计算属性
+- 跟Vue2里的Computed计算属性一样
 ```vue
-// 父组件
 <template>
-  <demo @hello="handelHello" />
+  <h1>一个人的信息</h1>
+  姓： <input type="text" v-model="person.fileName" />
+  <br />
+  <br />
+
+  名：<input type="text" v-model="person.lastName" />
+  <div>
+    {{ person.fullName }}
+  </div>
 </template>
+
 <script>
-import demo from "./components/Demo.vue";
+import { reactive, computed } from "vue";
 export default {
-  name: "App",
-  components: { demo },
+  name: "Computed",
   setup() {
-    function handelHello(msg) {
-      alert(`this is component emit, message is ${msg}`);
-    }
-    return {
-      handelHello,
-    };
-  },
-};
-</script>
-// 子组件
-<template>
-  <h1>我是App组件</h1>
-  <button @click="handelClick">点击触发Emit</button>
-</template>
-<script>
-export default {
-  name: "Demo",
-  emits:['hello'] // 注册事件
-  setup(props, context) {
-    // 方法
-    function handelClick() {
-      context.emit("hello", 6666);
-    }
-    // 返回一个对象
-    return {
-      handelClick,
-    };
-  },
-};
-</script>
-```
-- slots：收到的插槽的内容， 同Vue2的`this.$slots`
-## 计算属性和监视
-### 1. Computed 属性
-
-- 与Vue2的Computed属性一致，计算属性，计算属性
-- 写法
-  - 简单写法 没有考虑被修改
-
-```vue
-<template>
-  <h2>信息：{{ computedInformation }}</h2>
-</template>
-<script>
-import { reactive,computed } from "vue";
-export default {
-  setup(props, context) {
-    // 数据
     let person = reactive({
-      name: "Taxpolat",
-      age: 24,
+      fileName: "张",
+      lastName: "三",
     });
-    let computedInformation = computed(() => {
-      return person.name + person.age
-    })
-    // 返回一个对象
-    return {
-      computedInformation
-    };
-  },
-};
-</script>
-```
-
-  - 完整写法
-
-```vue
-<template>
-  <h2>信息：{{ computedInformationFull }}</h2>
-</template>
-<script>
-import { reactive,computed } from "vue";
-export default {
-  setup(props, context) {
-    // 数据
-    let person = reactive({
-      name: "Taxpolat",
-      age: 24,
-    });
-    let computedInformationFull = computed(() => {
-      get(){
-        return person.name + person.age
-      }
+    // 简写： 计算属性没有被修改的情况
+    // person.fullName = computed(() => person.fileName + "-" + person.lastName);
+    // 完整写法
+    person.fullName = computed({
+      get() {
+        return person.fileName + "-" + person.lastName;
+      },
       set(value) {
-        const nameArr= value.split("-")
-        person.name = nameArr[0]
-        person.age = nameArr[1]
-      }
-    })
-    // 返回一个对象
+        const name = value.split("-");
+        person.fileName = name[0];
+        person.lastName = name[1];
+      },
+    });
     return {
-      computedInformationFull
+      person,
     };
   },
 };
 </script>
+
 ```
-### 2. Watch函数
+
+###  Watch监视函数
 - 与Vue2的`watch`一致
 - 坑点：
   1. 监视reactive定义的响应式数据时：oldValue无法正确获取，强制开启了深度监视（deep配置无效）。
   2. 监视reactive定义的响应式数中某一个属性时：deep有效
+  3. 监视ref函数定义的<strong style="color:#DD5145">基本类型的响应式数据</strong>时不用`.value`
+  4. 监视ref函数定义的 <strong style="color:#DD5145">对象类型的响应式数据</strong>时需要`.value`，也需要`deep:true(深度监视)`
 
 `watch`写法分一下几种：
 ```vue
@@ -475,3 +576,308 @@ export default {
 };
 </script>
 ```
+### watchEffect函数
+- 立即执行传入的一个函数，同时响应式追踪其依赖，并在其依赖变更时重新运行该函数,即`看回调函数里面用到了哪个数据`，并依赖改数据重新运行函数。
+- <strong style="color:#DD5145">不用指明监视的属性，监视的回调中用到哪个属性，那就监视哪个属性</strong>
+- watchEffect默认打开了`immediate`选项
+- 可以追踪多层次的对象
+- 当 `watchEffect` 在组件的 `setup() `函数或生命周期钩子被调用时，侦听器会被链接到该组件的`生命周期`，并在组件`卸载`时自动停止。
+- 功能有点类似`computed函数`：
+  - `computed函数`比较注重计算出来的值（回调函数的返回值），必须要写返回值。
+  - `watchEffect函数`更注重的是过程（回调函数的实体），不用写返回值。
+
+```vue
+<template>
+  {{ count }}
+</template>
+
+<script >
+import { ref, watchEffect } from "vue";
+export default {
+  setup() {
+    const count = ref(10);
+    watchEffect(() => console.log(count.value, "----watchEffect-"));
+    setTimeout(() => {
+      count.value++;
+    }, 1000);
+    return {
+      count,
+    };
+  },
+};
+</script>
+```
+
+### 生命周期
+- Vue3中可以继续使用Vue2中的生命周期钩子函数，但有两个被更名：
+  - `beforeDestroy`更名为：`beforeUnmount`
+  - `destroyed`更名为: `unmounted`
+- Vue3提供了Composition API形式的生命周期钩子函数，即可以直接写到`setup`中：  
+  
+|    选项式 API     | Hook inside `setup` |
+| :---------------: | :-----------------: |
+|  `beforeCreate`   |     Not needed*     |
+|     `created`     |     Not needed*     |
+|   `beforeMount`   |   `onBeforeMount`   |
+|     `mounted`     |     `onMounted`     |
+|  `beforeUpdate`   |  `onBeforeUpdate`   |
+|     `updated`     |     `onUpdated`     |
+|  `beforeUnmount`  |  `onBeforeUnmount`  |
+|    `unmounted`    |    `onUnmounted`    |
+|  `errorCaptured`  |  `onErrorCaptured`  |
+|  `renderTracked`  |  `onRenderTracked`  |
+| `renderTriggered` | `onRenderTriggered` |
+|    `activated`    |    `onActivated`    |
+|   `deactivated`   |   `onDeactivated`   |
+
+:::tip
+因为 `setup` 是围绕 `beforeCreate` 和 `created` 生命周期钩子运行的，所以不需要显式地定义它们。换句话说，<strong style="color:#DD5145">在这些钩子中编写的任何代码都应该直接在 setup 函数中编写。</strong>
+:::
+
+### 自定义hook函数
+:::tip
+- 本质是个函数，把setup函数中使用的Composition API进行了封装去复用。
+- 优势在于：复用代码，让setup中的逻辑更清楚易懂
+:::
+### unRef
+__如果参数是一个 ref，则返回内部值，否则返回参数本身, 这是 `val = isRef(val) ? val.value : val `的语法糖函数。__
+```js
+const info = ref({name :'名字',info:{age:18,height:1111,}})
+const infos = {name :'名字',info:{age:18,height:1111, }}
+
+console.log(unref(info)) // Proxy {name: '名字', info: {…}}
+console.log(unref(infos))//       {name: '名字', info: {…}}
+```
+### toRef
+::: tip
+- 定义： 将`响应式对象`转换为`普通对象`，其中结果对象的每个 `property` 都是指向原始对象相应 `property` 的 `ref`
+- 作用:创建一个`ref对象`， 其value指向另一个对象中的某个属性
+- 语法： 
+```js
+const name  = toRef(person,'name')
+```
+- 应用：要讲响应式对象中的某一个属性单独提供给外部使用时。
+- 扩展：`toRefs`与`toRef`功能一直，但是可以批量创建多个ref对象，语法：`toRefs(person)`
+:::
+```js
+const state = reactive({
+  foo: 1,
+  bar: 2
+})
+
+const fooRef = toRef(state, 'foo')
+
+fooRef.value++
+console.log(state.foo) // 2
+
+state.foo++
+console.log(fooRef.value) // 3
+```
+__例子:__
+```vue
+<template>
+  <h1>姓名:{{ name }}</h1>
+  <h1>年龄:{{ age }}</h1>
+  <h1>薪资:{{ salary }}</h1>
+  <button @click="person.name += '!'">修改名字</button>
+  <button @click="person.age++">修改年龄</button>
+  <button @click="person.job.j1.salary += 10">涨薪</button>
+</template>
+
+<script>
+import { reactive, toRef } from "vue";
+export default {
+  setup() {
+    let person = reactive({
+      name: "张三",
+      age: 24,
+      job: {
+        j1: {
+          salary: 30,
+        },
+      },
+    });
+    return {
+      person,
+      name: toRef(person, "name"),
+      age: toRef(person, "age"),
+      salary: toRef(person.job.j1, "salary"),
+    };
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+</style>
+```
+
+### toRefs
+__可以用来为源响应式对象上的某个 `property` 新创建一个 ref。然后，ref 可以被传递，它会保持对其源 `property 的响应式连接`。__
+```js
+const state = reactive({
+  foo: 1,
+  bar: 2
+})
+
+const fooRef = toRef(state, 'foo')
+
+fooRef.value++
+console.log(state.foo) // 2
+
+state.foo++
+console.log(fooRef.value) // 3
+```
+__例子：__
+
+```vue
+<template>
+  <h1>姓名:{{ name }}</h1>
+  <h1>年龄:{{ age }}</h1>
+  <h1>薪资:{{ job.j1.salary }}</h1>
+  <button @click="name += '!'">修改名字</button>
+  <button @click="age++">修改年龄</button>
+  <button @click="job.j1.salary += 10">涨薪</button>
+</template>
+
+<script>
+import { reactive, toRefs } from "vue";
+export default {
+  setup() {
+    let person = reactive({
+      name: "张三",
+      age: 24,
+      job: {
+        j1: {
+          salary: 30,
+        },
+      },
+    });
+    return {
+      ...toRefs(person),
+    };
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+</style>
+```
+#### ref, toRef和toRefs的对比
+-  `ref` 本质是拷贝，修改响应式数据不会影响原始数据；`toRef`的本质是引用关系，修改响应式数据会影响原始数据
+- `toRef`对定义的响应对象的某个属性进行引用
+- `toRefs`对定义的响应对象的全部属性进行引用
+- `ref`数据发生改变，界面会自动更新,修改通过`toRef`创建的响应式数据，并不会触发UI界面的更新。
+- `toRef`传参与`ref`不同；`toRef`接收两个参数，第一个参数是哪个对象，第二个参数是对象的哪个属性
+- `toRefs`接收一个对象作为参数,它会遍历对象身上的所有属性，然后挨个调用`toRef`执行
+
+
+### customRef
+__创建一个自定义的 `ref`，并对其依赖项跟踪和更新触发进行显式控制。它需要一个工厂函数，该函数接收 `track` 和 `trigger` 函数作为参数，并且应该返回一个带有 `get` 和 `set` 的对象。__
+基本代码：
+```js
+function useDebouncedRef(value) {
+  return customRef((track, trigger) => {
+    return {
+      get() {
+        track()
+        return value;
+      },
+      set(newValue) {
+        trigger()
+        value = newValue
+      }
+    }
+  });
+}
+```
+- 当读取自定义的 `ref`时，会走`get`方法里面的逻辑内容
+- 当修改自定义的 `ref`时，会走`set`方法里面的逻辑内容
+- `track`：数据追踪
+- `trigger`作用是通知Vue去重新解析模版
+使用自定义 ref 通过 v-model 实现 debounce 的示例：
+```vue
+<template>
+  <div>
+    <el-input v-model="text" placeholder="Please input" />
+    {{ text }}
+  </div>
+</template>
+
+<script>
+import { customRef } from "vue";
+function useDebouncedRef(value, delay = 2000) {
+  let timeout;
+  return customRef((track, trigger) => {
+    return {
+      get() {
+        track();
+        return value;
+      },
+      set(newValue) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          value = newValue;
+          trigger();
+        }, delay);
+      },
+    };
+  });
+}
+
+export default {
+  setup() {
+    return {
+      text: useDebouncedRef(""),
+    };
+  },
+};
+</script>
+
+<style scoped>
+</style>
+```
+### Provide / Inject
+- 实现祖孙组件通信
+- 用法： 父组件有个`Provide`选项来提供数据，子组件有一个`Inject`选项来接受并使用这些数据
+- 如果`Provide`接受提供的数据是响应式的，`Inject`接受的数据也是响应式的
+```vue
+// 祖组件提供数据
+<script>
+
+import { reactive,provide } from "vue";
+export default {
+  setup() {
+    let car = reactive({
+      name:'宝马',
+      price:'50w'
+    })
+    provide('car',car)
+    return {
+      car
+    };
+  },
+};
+</script>
+
+//孙组件接受数据
+<script>
+import { inject } from "vue";
+export default {
+  setup() {
+    let car = inject('car')
+    return {
+      car
+    };
+  },
+};
+</script>
+```
+
+### 响应式数据的判断
+|     名称     |                           作用                           |
+| :----------: | :------------------------------------------------------: |
+|   `isRef`    |               检查值是否为一个 `ref` 对象                |
+| `isReactive` |      检查对象是否是由 `reactive` 创建的响应式代理。      |
+| `isReadonly` |        检查对象是否是由 `readonly` 创建的只读代理        |
+|  `isProxy`   | 检查对象是否是由 `reactive` 或 `readonly` 创建的 `proxy` |
+

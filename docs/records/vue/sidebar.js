@@ -9,6 +9,6 @@ module.exports = [{
     '/records/vue/notes/Globalization',
     '/records/vue/notes/UseSVG',
     '/records/vue/notes/ElementLoading',
-    '/records/vue/notes/Vue3'
+    '/records/vue/notes/Vue3',
   ]
 }]
