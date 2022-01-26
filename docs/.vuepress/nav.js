@@ -6,13 +6,19 @@ module.exports = [{
     text: '笔记',
     link: '/records/',
     items: [{
+        text: 'Javascript',
+        link: '/records/JavaScript/notes/MD5'
+      },
+      {
+        text: 'TypeScript',
+        link: '/records/TypeScript/notes/basic'
+      },
+      {
         text: 'vue',
         link: '/records/vue/notes/VueBasic'
       },
+
       {
-        text: 'Javascript',
-        link: '/records/JavaScript/notes/MD5'
-      }, {
         text: '小程序',
         link: '/records/miniApp/notes/customizeNavigation'
       },
