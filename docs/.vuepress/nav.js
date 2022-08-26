@@ -14,11 +14,16 @@ module.exports = [{
         link: '/records/TypeScript/notes/basic'
       },
       {
-        text: 'vue',
+        text: 'Vue',
         link: '/records/vue/notes/VueBasic'
+      },
+      {
+        text: 'React',
+        link: '/records/React/notes/reactBasic'
       },
 
       {
+
         text: '小程序',
         link: '/records/miniApp/notes/customizeNavigation'
       },
